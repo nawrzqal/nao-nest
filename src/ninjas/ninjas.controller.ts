@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { NinjasService } from './ninjas.service';
 import { json } from 'stream/consumers';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
-import { identity } from 'rxjs';
+import { identity, NotFoundError } from 'rxjs';
 
 @Controller('ninjas')
 export class NinjasController {
@@ -22,7 +22,19 @@ export class NinjasController {
     // GET/ninjas/:id --> { ... }
     @Get(':id')
     getOneNinja(@Param('id') id:string ){
-        return this.ninjaService.getNinja(+id); // + because it comes as string in link and we need number
+        try{
+            return this.ninjaService.getNinja(+id); // + because it comes as string in link and we need number
+        }catch{
+            throw new NotFoundException();
+            // customize
+            // throw new NotFoundException('Ninja not found');
+
+            /* 
+                you can write a custom exception filter
+                for more : https://docs.nestjs.com/exception-filters
+            */
+            
+        }
     }
 
     // POST/ninjas
@@ -43,3 +55,4 @@ export class NinjasController {
         return this.ninjaService.removeNinja(+id);
     }
 }
+

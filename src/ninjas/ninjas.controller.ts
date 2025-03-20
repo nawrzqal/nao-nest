@@ -1,11 +1,12 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { NinjasService } from './ninjas.service';
 import { json } from 'stream/consumers';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { identity, NotFoundError } from 'rxjs';
-
+import { BeltGuard } from 'src/belt/belt.guard';
 @Controller('ninjas')
+// @UseGuards(BeltGuard)
 export class NinjasController {
     // dependency Injection
     constructor(private readonly ninjaService: NinjasService) {}
@@ -38,6 +39,7 @@ export class NinjasController {
 
     // POST/ninjas
     @Post()
+    @UseGuards(BeltGuard)
     createNinja(@Body( new ValidationPipe() ) createNinjaDto: CreateNinjaDto){
         return this.ninjaService.createNinja(createNinjaDto);
     }
@@ -60,3 +62,12 @@ export class NinjasController {
     }
 }
 
+import { PipeTransform, Injectable, ArgumentMetadata } from '@nestjs/common';
+
+@Injectable()
+export class CustomValidationPipe implements PipeTransform {
+  transform(value: any, metadata: ArgumentMetadata) {
+    // تحويل أو التحقق من البيانات هنا
+    return value;
+  }
+}

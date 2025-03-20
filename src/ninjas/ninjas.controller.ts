@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, NotFoundException, Param, ParseIntPipe, Post, Put, Query, ValidationPipe } from '@nestjs/common';
 import { CreateNinjaDto } from './dto/create-ninja.dto';
 import { NinjasService } from './ninjas.service';
 import { json } from 'stream/consumers';
@@ -21,9 +21,9 @@ export class NinjasController {
 
     // GET/ninjas/:id --> { ... }
     @Get(':id')
-    getOneNinja(@Param('id') id:string ){
+    getOneNinja(@Param('id', ParseIntPipe) id:number ){
         try{
-            return this.ninjaService.getNinja(+id); // + because it comes as string in link and we need number
+            return this.ninjaService.getNinja(id); // no need for +id after using pipe
         }catch{
             throw new NotFoundException();
             // customize
@@ -33,26 +33,30 @@ export class NinjasController {
                 you can write a custom exception filter
                 for more : https://docs.nestjs.com/exception-filters
             */
-            
         }
     }
 
     // POST/ninjas
     @Post()
-    createNinja(@Body() createNinjaDto: CreateNinjaDto){
+    createNinja(@Body( new ValidationPipe() ) createNinjaDto: CreateNinjaDto){
         return this.ninjaService.createNinja(createNinjaDto);
     }
 
     // PUT/PATCH/ninjas/:id --> { ... }
     @Put(':id')
-    uodateNinja(@Param('id') id:string, @Body() updateNinjaDto: UpdateNinjaDto ){
-        return this.ninjaService.updateNinja(+id,updateNinjaDto);
+    uodateNinja(@Param('id', ParseIntPipe) id:number, @Body() updateNinjaDto: UpdateNinjaDto ){
+        return this.ninjaService.updateNinja(id,updateNinjaDto);
     }
 
     // DELETE/ninjas/:id
     @Delete(':id')
-    removeNinja(@Param('id') id:string){
-        return this.ninjaService.removeNinja(+id);
+    removeNinja(@Param('id', ParseIntPipe) id:number ){
+        try{
+            return this.ninjaService.removeNinja(id);
+        }catch {
+            throw new NotFoundException();
+        }
+        
     }
 }
 

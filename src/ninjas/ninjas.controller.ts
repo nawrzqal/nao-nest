@@ -6,6 +6,9 @@ import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { identity, NotFoundError } from 'rxjs';
 import { BeltGuard } from 'src/belt/belt.guard';
 import { Ninja } from './entities/ninja.entity';
+import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+
+@ApiTags('ninjas')
 @Controller('ninjas')
 // @UseGuards(BeltGuard)
 export class NinjasController {
@@ -15,6 +18,7 @@ export class NinjasController {
 
 
     // GET/ninjas --> []
+    @ApiOkResponse({type: Ninja, isArray: true})
     @Get()
     getNinjas(@Query('weapon') weapon: 'stars' | 'nunchucks' ) : Ninja[] {
         // const service = new NinjasService();
@@ -22,6 +26,7 @@ export class NinjasController {
     }
 
     // GET/ninjas/:id --> { ... }
+    @ApiOkResponse({type: Ninja})
     @Get(':id')
     getOneNinja(@Param('id', ParseIntPipe) id:number ): Ninja {
         try{
@@ -39,6 +44,7 @@ export class NinjasController {
     }
 
     // POST/ninjas
+    @ApiCreatedResponse({type: Ninja})
     @Post()
     @UseGuards(BeltGuard)
     createNinja(@Body( new ValidationPipe() ) createNinjaDto: CreateNinjaDto): Ninja {

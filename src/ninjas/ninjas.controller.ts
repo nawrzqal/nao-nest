@@ -5,6 +5,7 @@ import { json } from 'stream/consumers';
 import { UpdateNinjaDto } from './dto/update-ninja.dto';
 import { identity, NotFoundError } from 'rxjs';
 import { BeltGuard } from 'src/belt/belt.guard';
+import { Ninja } from './entities/ninja.entity';
 @Controller('ninjas')
 // @UseGuards(BeltGuard)
 export class NinjasController {
@@ -15,14 +16,14 @@ export class NinjasController {
 
     // GET/ninjas --> []
     @Get()
-    getNinjas(@Query('weapon') weapon: 'stars' | 'nunchucks' ) {
+    getNinjas(@Query('weapon') weapon: 'stars' | 'nunchucks' ) : Ninja[] {
         // const service = new NinjasService();
         return this.ninjaService.getNinjas(weapon);
     }
 
     // GET/ninjas/:id --> { ... }
     @Get(':id')
-    getOneNinja(@Param('id', ParseIntPipe) id:number ){
+    getOneNinja(@Param('id', ParseIntPipe) id:number ): Ninja {
         try{
             return this.ninjaService.getNinja(id); // no need for +id after using pipe
         }catch{
@@ -40,19 +41,19 @@ export class NinjasController {
     // POST/ninjas
     @Post()
     @UseGuards(BeltGuard)
-    createNinja(@Body( new ValidationPipe() ) createNinjaDto: CreateNinjaDto){
+    createNinja(@Body( new ValidationPipe() ) createNinjaDto: CreateNinjaDto): Ninja {
         return this.ninjaService.createNinja(createNinjaDto);
     }
 
     // PUT/PATCH/ninjas/:id --> { ... }
     @Put(':id')
-    uodateNinja(@Param('id', ParseIntPipe) id:number, @Body() updateNinjaDto: UpdateNinjaDto ){
+    uodateNinja(@Param('id', ParseIntPipe) id:number, @Body() updateNinjaDto: UpdateNinjaDto ): Ninja {
         return this.ninjaService.updateNinja(id,updateNinjaDto);
     }
 
     // DELETE/ninjas/:id
     @Delete(':id')
-    removeNinja(@Param('id', ParseIntPipe) id:number ){
+    removeNinja(@Param('id', ParseIntPipe) id:number ): Ninja {
         try{
             return this.ninjaService.removeNinja(id);
         }catch {

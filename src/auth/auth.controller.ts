@@ -2,12 +2,15 @@ import { Body, Controller, Get, HttpCode, HttpStatus,Request , Post, UseGuards }
 import { AuthService } from './auth.service';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { AuhtGuard } from './atuh.guard';
+import { Public } from 'src/public.decorator';
 
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {}
 
     @HttpCode(HttpStatus.OK)
+    // make the route public
+    @Public()
     @Post('login')
     Login(@Body() LoginUser: LoginUserDto) {
       return this.authService.login(LoginUser);

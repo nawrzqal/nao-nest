@@ -1,12 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
-import { Ninja } from '../../ninjas/entities/ninja.schema';
 
 export type UserDocument = User & Document;
 
 @Schema({ timestamps: true })
 export class User {
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId })
+  _id: Types.ObjectId;
+
   @Prop({ required: true })
   name: string;
 
@@ -20,7 +23,7 @@ export class User {
   userType: 'admin' | 'player';
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ninja' }] })
-  ninjas: Types.ObjectId[] | Ninja[];
+  ninjas: Types.ObjectId[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

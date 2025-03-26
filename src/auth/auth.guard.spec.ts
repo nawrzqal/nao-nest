@@ -1,9 +1,9 @@
 import { JwtService } from '@nestjs/jwt';
-import { AuhtGuard } from './atuh.guard';
+import { AuthGuard } from './auth.guard';
 import { Reflector } from '@nestjs/core';
 
 describe('BeltGuard', () => {
   it('should be defined', () => {
-    expect(new AuhtGuard(new JwtService(), new Reflector())).toBeDefined();
+    expect(new AuthGuard(new JwtService(), new Reflector())).toBeDefined();
   });
 });

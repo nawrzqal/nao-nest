@@ -12,7 +12,7 @@ export class AuthService {
         private jwtService: JwtService
     ) {}
     
-   async login(loginUser: LoginUserDto): Promise<String> {
+   async login(loginUser: LoginUserDto): Promise<any> {
     const user = await this.usersService.findByEmail(loginUser.email);
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');

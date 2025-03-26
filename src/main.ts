@@ -10,6 +10,7 @@ async function bootstrap() {
     .setDescription('The ninja API description')
     .setVersion('1.0')
     .addTag('ninjas')
+    .addBearerAuth()
     .build();
   
   const document = SwaggerModule.createDocument(app, config);

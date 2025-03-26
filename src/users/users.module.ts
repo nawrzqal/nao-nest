@@ -4,7 +4,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { User, UserSchema } from './entities/user.entity';
 import { APP_GUARD } from '@nestjs/core';
-import { AuhtGuard } from 'src/auth/atuh.guard';
+import { AuthGuard } from 'src/auth/auth.guard';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
@@ -14,7 +14,7 @@ import { AuhtGuard } from 'src/auth/atuh.guard';
             // apply auth guard to all routes
               {
                 provide: APP_GUARD,
-                useClass: AuhtGuard,
+                useClass: AuthGuard,
               }
   ],
   // Export service to be used in other modules (AuthModule)

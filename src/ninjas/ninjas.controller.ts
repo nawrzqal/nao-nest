@@ -36,7 +36,7 @@ export class NinjasController {
     // POST/ninjas
     @ApiCreatedResponse({type: Ninja})
     @Post()
-    @UseGuards(BeltGuard)
+    // @UseGuards(BeltGuard)
     async createNinja(@Body(new ValidationPipe()) createNinjaDto: CreateNinjaDto) {
         return this.ninjaService.createNinja(createNinjaDto);
     }

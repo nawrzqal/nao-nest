@@ -8,13 +8,21 @@ import { AuthService } from './auth/auth.service';
 import { AuthController } from './auth/auth.controller';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { PostsModule } from './posts/posts.module';
+import { CategoriesModule } from './categories/categories.module';
+import { RatesModule } from './rates/rates.module';
+import { CommentsModule } from './comments/comments.module';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/ninja-api'),
-    NinjasModule, 
+    // NinjasModule, 
     UsersModule,
     AuthModule,
-    ConfigModule.forRoot({isGlobal: true})
+    ConfigModule.forRoot({isGlobal: true}),
+    PostsModule,
+    CategoriesModule,
+    RatesModule,
+    CommentsModule
   ],
   controllers: [AppController, AuthController],
   providers: [AppService, AuthService],

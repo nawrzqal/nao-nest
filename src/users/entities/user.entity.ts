@@ -22,8 +22,15 @@ export class User {
   @Prop({ required: true, enum: ['admin', 'player'], default: 'player' })
   userType: 'admin' | 'player';
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ninja' }] })
-  ninjas: Types.ObjectId[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }] })
+  posts: Types.ObjectId[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
+  comments: Types.ObjectId[];
+
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating' }] })
+  ratings: Types.ObjectId[];
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

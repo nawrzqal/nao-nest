@@ -11,14 +11,6 @@ import { ApiBearerAuth, ApiCreatedResponse } from '@nestjs/swagger';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @ApiCreatedResponse({type: User})
-  @Post('register')
-  @Public()
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
-    return this.usersService.create(createUserDto);
-  }
-
   @Get()
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();

@@ -23,5 +23,5 @@ export class UpdatePostDto extends PartialType(CreatePostDto) {
   @ApiPropertyOptional({ description: 'The updated category of the post' })
   @IsOptional()
   @IsString()
-  category?: Types.ObjectId;
+  category?: string;
 }

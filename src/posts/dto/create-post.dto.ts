@@ -22,10 +22,6 @@ export class CreatePostDto {
   @ApiProperty({description: 'The category of the post'})
   @IsNotEmpty()
   @IsString()
-  category: Types.ObjectId;
+  category?: string;
   
-  @ApiProperty({description: 'The creator of the post'})
-  @IsNotEmpty()
-  @IsString()
-  creator: Types.ObjectId;
 }

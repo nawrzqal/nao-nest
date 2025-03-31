@@ -4,15 +4,20 @@ import { UsersService } from 'src/users/users.service';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { resultUserDto } from './dto/result-atuh.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
-    constructor(
-        private usersService: UsersService,
-        private jwtService: JwtService
-    ) {}
+  constructor(
+      private usersService: UsersService,
+      private jwtService: JwtService
+  ) {}
     
-   async login(loginUser: LoginUserDto): Promise<any> {
+  async signup(signupUser: CreateUserDto) {
+      return this.usersService.create(signupUser);
+  }
+
+  async login(loginUser: LoginUserDto): Promise<any> {
     const user = await this.usersService.findByEmail(loginUser.email);
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
@@ -23,7 +28,7 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    const payload = { _id: user._id, email: user.email, userType: user.userType };
+    const payload = { _id: user._id, name:user.name, email: user.email, userType: user.userType };
     const token = await this.jwtService.signAsync(payload);
     return token;
   } 

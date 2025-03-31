@@ -4,15 +4,25 @@ import { LoginUserDto } from './dto/login-auth.dto';
 import { AuthGuard } from './auth.guard';
 import { Public } from 'src/public.decorator';
 import { ApiOkResponse } from '@nestjs/swagger';
+import { sign } from 'crypto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 @Controller('auth')
 export class AuthController {
     constructor(private authService: AuthService) {}
 
+
+    @ApiOkResponse({type: CreateUserDto})
+    @HttpCode(HttpStatus.CREATED)
+    @Public() // make the route public 
+    @Post('signup')
+    Signup(@Body() signupUser: CreateUserDto) {
+        return this.authService.signup(signupUser);
+    }
+    
     @ApiOkResponse({type: LoginUserDto})
     @HttpCode(HttpStatus.OK)
-    // make the route public
-    @Public()
+    @Public() // make the route public 
     @Post('login')
     Login(@Body() LoginUser: LoginUserDto) {
       return this.authService.login(LoginUser);
@@ -23,4 +33,5 @@ export class AuthController {
     getProfile(@Request() req: Request) {
       return req['user'];
     }
+
 }

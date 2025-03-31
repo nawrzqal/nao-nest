@@ -13,12 +13,11 @@ export class AuthGuard implements CanActivate {
   
   private extractTokenFromHeader(request: Request): string | undefined {
     const [type, token] = request.headers.authorization?.split(' ') ?? [];
-    console.log(token);
+    // console.log(token);
     return type === 'Bearer' ? token : undefined;
   }
 
   async canActivate(context: ExecutionContext,): Promise<boolean> {
-    
     // check if the route is public
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
       context.getHandler(),
@@ -32,9 +31,10 @@ export class AuthGuard implements CanActivate {
     const token = this.extractTokenFromHeader(request);
     
     if (!token) {
+        // console.log('cannot Activate');
         throw new UnauthorizedException();
     }
-
+    // console.log(token+' token');
     try {
       const payload = await this.jwtService.verifyAsync(
         token,

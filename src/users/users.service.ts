@@ -34,12 +34,12 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().populate('ninjas').exec();
+    return this.userModel.find().exec();
   }
 
   async findOne(id: string): Promise<User> {
     try {
-      const user = await this.userModel.findById(id).populate('ninjas').exec();
+      const user = await this.userModel.findById(id).exec();
       
       if (!user) {
         throw new NotFoundException(`User with ID ${id} not found`);
@@ -68,7 +68,6 @@ export class UsersService {
       // Update the user and return the updated document
       const updatedUser = await this.userModel
         .findByIdAndUpdate(id, updateData, { new: true })
-        .populate('ninjas')
         .exec();
       
       return updatedUser as User;
@@ -102,4 +101,5 @@ export class UsersService {
     }
     return user;
   }
+  
 }

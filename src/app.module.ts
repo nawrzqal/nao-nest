@@ -14,11 +14,11 @@ import { RatesModule } from './rates/rates.module';
 import { CommentsModule } from './comments/comments.module';
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/ninja-api'),
-    // NinjasModule, 
-    UsersModule,
+    MongooseModule.forRoot('mongodb://localhost:27017/nest-api'),
     AuthModule,
     ConfigModule.forRoot({isGlobal: true}),
+    // NinjasModule, 
+    UsersModule,
     PostsModule,
     CategoriesModule,
     RatesModule,

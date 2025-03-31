@@ -22,7 +22,7 @@ export class Post {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   creator: Types.ObjectId;
 
-  @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
+  @Prop({ /*required: true,*/ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
   category: Types.ObjectId;
 
   @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })

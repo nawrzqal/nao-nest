@@ -18,8 +18,8 @@ export class Category {
   description: string;
 
 
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post' })
-  posts: Types.ObjectId[];
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', default: null })
+  posts: Types.ObjectId[] | null;
 
 }
 

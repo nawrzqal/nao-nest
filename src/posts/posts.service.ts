@@ -3,7 +3,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { UsersService } from 'src/users/users.service';
 import { Post, PostDocument } from './entities/post.entity';
-import { Model } from 'mongoose';
+import { Model,Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -13,8 +13,8 @@ export class PostsService {
     @InjectModel(Post.name) private postModel: Model<PostDocument>
   ) {}
   
-  async create(userid:string , createPostDto: CreatePostDto) {
-    const creator = await this.usersService.findOne(userid);
+  async create(userId:string , createPostDto: CreatePostDto) {
+    const creator = await this.usersService.findOne(userId);
     
     try {
       const post = new this.postModel({
@@ -23,7 +23,11 @@ export class PostsService {
       });
 
       const newPost = await post.save();
-      await this.usersService.update( userid, {posts: [...creator.posts, newPost._id]});
+
+      // Handle the case where posts could be null or undefined
+      const existingPosts = creator.posts || [];      
+
+      await this.usersService.update( userId, {posts: [...existingPosts, newPost._id]});
       return newPost;
     } catch (error) {
       throw new BadRequestException(error);
@@ -71,11 +75,14 @@ export class PostsService {
 
       // Get the user and their current posts
       const user = await this.usersService.findOne(userId);
-      
-      // Filter out the deleted post from user's posts array
-      const updatedPosts = user.posts.filter(
-        post => post.toString() !== postId
-      );
+
+      let updatedPosts: Types.ObjectId[] = [];
+      if(user.posts){
+        // Filter out the deleted post from user's posts array
+        updatedPosts = user.posts.filter(
+          post => post.toString() !== postId
+        );
+      }
 
       // Delete the post and update the user's posts array
       await Promise.all([
@@ -89,4 +96,19 @@ export class PostsService {
       throw new BadRequestException(error);
     }
   }
+
+  async removeCategoryFromAllPosts(categoryId: string) {
+    try {
+      const posts = await this.postModel.find({ category: categoryId }).exec();
+      for (const post of posts) {
+        post.category = null; // Set to null instead of undefined
+        await post.save();
+      }
+      return { message: 'Category removed from all posts' };
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  
 }

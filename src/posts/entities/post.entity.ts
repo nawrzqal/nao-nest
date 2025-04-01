@@ -22,14 +22,14 @@ export class Post {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   creator: Types.ObjectId;
 
-  @Prop({ /*required: true,*/ type: mongoose.Schema.Types.ObjectId, ref: 'Category' })
-  category: Types.ObjectId;
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null })
+  category: Types.ObjectId | null;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }] })
-  comments: Types.ObjectId[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment',default: null }] })
+  comments: Types.ObjectId[] | null;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rate' }] })
-  rates: Types.ObjectId[];
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rate',default: null }] })
+  rates: Types.ObjectId[] | null;
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

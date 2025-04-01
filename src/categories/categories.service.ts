@@ -1,26 +1,65 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Category } from './entities/category.entity';
+import { PostsService } from 'src/posts/posts.service';
 @Injectable()
 export class CategoriesService {
-  create(createCategoryDto: CreateCategoryDto) {
-    return 'This action adds a new category';
+  constructor(
+    @InjectModel(Category.name) private categoryModel: Model<Category>,
+    private readonly postsService: PostsService
+  ) {}
+
+  async create(createCategoryDto: CreateCategoryDto) {
+    try {
+      const category = new this.categoryModel(createCategoryDto);
+      await category.save();
+      return category;
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
-  findAll() {
-    return `This action returns all categories`;
+  async findAll() {
+    try {
+      return await this.categoryModel.find();
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOne(id: string) {
+    try {
+      // return the category with the posts
+      return await this.categoryModel.findById(id).populate('posts');
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: string, updateCategoryDto: UpdateCategoryDto) {
+    try {
+      const category = await this.categoryModel.findById(id);
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+      
+      return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, { new: true });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: string) {
+    try {
+      await this.categoryModel.findByIdAndDelete(id);
+      await this.postsService.removeCategoryFromAllPosts(id);
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
   }
+
+
 }

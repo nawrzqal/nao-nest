@@ -8,11 +8,11 @@ import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('posts')
 @ApiBearerAuth()
+@UseGuards(AuthGuard)
 export class PostsController {
   constructor(private readonly postsService: PostsService) {}
 
   @Post()
-  @UseGuards(AuthGuard)
   async create(@Body() createPostDto: CreatePostDto, @Req() request: Request ) {
     // console.log(request);
     const userId = request['user']._id;
@@ -31,7 +31,6 @@ export class PostsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard)
   async update(@Param('id') postId: string, @Body() updatePostDto: UpdatePostDto,@Req() request: Request) {
     const userId = request['user']._id;
     return this.postsService.update(postId , userId , updatePostDto);

@@ -18,5 +18,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
     @IsOptional()
     @IsArray()
-    posts?: Types.ObjectId[];
+    posts?: Types.ObjectId[] | null ;
 }

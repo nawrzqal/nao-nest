@@ -81,14 +81,14 @@ export class PostsService {
       const user = await this.usersService.findOne(userId);
 
       let updatedPosts: Types.ObjectId[] = [];
-      if(user.posts){
+      if(user.posts && user.posts.length > 0){
         // Filter out the deleted post from user's posts array
         updatedPosts = user.posts.filter(
           post => post.toString() !== postId
         );
       }
 
-      if(post.category){
+      if(post.category ){
         const removePostFromCategory = await this.categoriesService.removePostFromCategory(post.category.toString(), postId);
       }
 

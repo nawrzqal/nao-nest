@@ -25,11 +25,11 @@ export class Post {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Category', default: null })
   category: Types.ObjectId | null;
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment',default: null }] })
-  comments: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment',default: [] }] })
+  comments: Types.ObjectId[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rate',default: null }] })
-  rates: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rate',default: [] }] })
+  rates: Types.ObjectId[];
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

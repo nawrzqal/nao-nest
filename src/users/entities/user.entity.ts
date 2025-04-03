@@ -22,14 +22,14 @@ export class User {
   @Prop({ required: true, enum: ['admin', 'normal'], default: 'normal' })
   userType: 'admin' | 'normal';
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post',default: null }] })
-  posts: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post',default: [] }] })
+  posts: Types.ObjectId[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment',default: null }] })
-  comments: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment',default: [] }] })
+  comments: Types.ObjectId[];
 
-  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating',default: null }] })
-  ratings: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Rating',default: [] }] })
+  ratings: Types.ObjectId[];
 
 }
 

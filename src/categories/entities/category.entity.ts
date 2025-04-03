@@ -1,4 +1,3 @@
-
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
@@ -17,9 +16,8 @@ export class Category {
   @Prop({ required: true })
   description: string;
 
-
-  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', default: null })
-  posts: Types.ObjectId[] | null;
+  @Prop({ type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }], default: [] })
+  posts: Types.ObjectId[];
 
 }
 

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { InjectModel } from '@nestjs/mongoose';
@@ -9,6 +9,7 @@ import { PostsService } from 'src/posts/posts.service';
 export class CategoriesService {
   constructor(
     @InjectModel(Category.name) private categoryModel: Model<Category>,
+    @Inject(forwardRef(() => PostsService))
     private readonly postsService: PostsService
   ) {}
 

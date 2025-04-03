@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, ContextType, Inject, NotFoundException, ForbiddenException} from '@nestjs/common';
+import { BadRequestException, Injectable, ContextType, Inject, NotFoundException, ForbiddenException, forwardRef} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { UsersService } from 'src/users/users.service';
@@ -11,6 +11,7 @@ import { CategoriesService } from 'src/categories/categories.service';
 export class PostsService {
   constructor(
     private readonly usersService: UsersService,
+    @Inject(forwardRef(() => CategoriesService))
     private readonly categoriesService: CategoriesService,
     @InjectModel(Post.name) private postModel: Model<PostDocument>
   ) {}

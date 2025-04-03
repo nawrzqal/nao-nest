@@ -5,11 +5,13 @@ import { UsersService } from 'src/users/users.service';
 import { Post, PostDocument } from './entities/post.entity';
 import { Model,Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { CategoriesService } from 'src/categories/categories.service';
 
 @Injectable()
 export class PostsService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly categoriesService: CategoriesService,
     @InjectModel(Post.name) private postModel: Model<PostDocument>
   ) {}
   
@@ -24,6 +26,9 @@ export class PostsService {
 
       const newPost = await post.save();
 
+      if(createPostDto.category){
+        const addPostToCategory = await this.categoriesService.addPostToCategory(createPostDto.category, newPost._id.toString());
+      }
       // Handle the case where posts could be null or undefined
       const existingPosts = creator.posts || [];      
 
@@ -65,9 +70,7 @@ export class PostsService {
   }
 
   async remove(postId: string, userId: string) {
-
     try{
-
       const post = await this.postModel.findById(postId);
       if(!post) throw new NotFoundException('Post not found');
       if( post.creator.toString() !== userId) 
@@ -82,6 +85,10 @@ export class PostsService {
         updatedPosts = user.posts.filter(
           post => post.toString() !== postId
         );
+      }
+
+      if(post.category){
+        const removePostFromCategory = await this.categoriesService.removePostFromCategory(post.category.toString(), postId);
       }
 
       // Delete the post and update the user's posts array

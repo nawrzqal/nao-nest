@@ -61,5 +61,20 @@ export class CategoriesService {
     }
   }
 
+  async addPostToCategory(categoryId: string, postId: string) {
+    try {
+      return await this.categoryModel.findByIdAndUpdate(categoryId, { $push: { posts: postId } }, { new: true });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async removePostFromCategory(categoryId: string, postId: string) {
+    try {
+      return await this.categoryModel.findByIdAndUpdate(categoryId, { $pull: { posts: postId } }, { new: true });
+    } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
 
 }

@@ -6,13 +6,15 @@ import { Post, PostDocument } from './entities/post.entity';
 import { Model,Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CategoriesService } from 'src/categories/categories.service';
-
+import { CommentsService } from 'src/comments/comments.service';
 @Injectable()
 export class PostsService {
   constructor(
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => CategoriesService))
     private readonly categoriesService: CategoriesService,
+    @Inject(forwardRef(() => CommentsService))
+    private readonly commentService: CommentsService,
     @InjectModel(Post.name) private postModel: Model<PostDocument>
   ) {}
   
@@ -54,7 +56,7 @@ export class PostsService {
     }
   }
 
-  findAll() {
+  async findAll() {
     try {
       return this.postModel.find().exec();
     } catch (error) {
@@ -62,7 +64,7 @@ export class PostsService {
     }
   }
 
-  findOne(id: string) {
+  async findOne(id: string) {
     try {
       return this.postModel.findById(id).exec();
     } catch (error) {
@@ -114,6 +116,21 @@ export class PostsService {
       }
       return { message: 'Category removed from all posts' };
     } catch (error) {
+      throw new BadRequestException(error);
+    }
+  }
+
+  async addCommentToPost(postId: string, commentId: string) {
+    try {
+      const post = await this.postModel.findById(postId);
+      if (!post) throw new NotFoundException('Post not found');
+
+      post.comments.push(new Types.ObjectId(commentId));
+      await post.save();
+
+      return post;
+
+    }catch(error){
       throw new BadRequestException(error);
     }
   }

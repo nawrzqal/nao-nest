@@ -12,10 +12,10 @@ import { AuthGuard } from 'src/auth/auth.guard';
   controllers: [UsersController],
   providers: [UsersService, 
             // apply auth guard to all routes
-              {
+/*               {
                 provide: APP_GUARD,
                 useClass: AuthGuard,
-              }
+              } */
   ],
   // Export service to be used in other modules (AuthModule)
   exports: [UsersService], 

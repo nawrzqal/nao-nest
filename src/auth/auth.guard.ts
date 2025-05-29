@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { IS_PUBLIC_KEY } from 'src/public.decorator';
+import { IS_PUBLIC_KEY } from '../public.decorator';
 import { Reflector } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 dotenv.config();

@@ -3,6 +3,7 @@ import { Document, Types } from 'mongoose';
 import * as mongoose from 'mongoose';
 import { User } from '../../users/entities/user.entity';
 import { Post } from '../../posts/entities/post.entity';
+import { Type } from '@nestjs/common';
 
 export type CommentDocument = Comment & Document;
 
@@ -20,6 +21,9 @@ export class Comment {
     username: string;
     imageUrl: string;
   };
+
+  @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true })
+  post: Types.ObjectId;
 
   /*
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' })
